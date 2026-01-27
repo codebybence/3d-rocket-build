@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Nyomtatott Rakéta / 3D Printed Rocket</title>
+    
+    <link rel="stylesheet" href="styles.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+</head>
+<body>
+    <div class="language-switcher">
+        <button class="lang-btn active" id="btn-hu" onclick="setLanguage('hu')">
+            <span class="flag">🇭🇺</span>
+            <span>Magyar</span>
+        </button>
+        <button class="lang-btn" id="btn-en" onclick="setLanguage('en')">
+            <span class="flag">🇬🇧</span>
+            <span>English</span>
+        </button>
+    </div>
+
+    <div class="stars" id="stars"></div>
+
+    <div class="container">
+        <header>
+            <div class="rocket-icon">🚀</div>
+            <h1 data-hu="3D Nyomtatott Rakéta" data-en="3D Printed Rocket">3D Nyomtatott Rakéta</h1>
+            <p class="subtitle" data-hu="Nyomtasd ki a saját rakétádat és indítsd útnak a képzeleted!" data-en="Print your own rocket and launch your imagination!">Nyomtasd ki a saját rakétádat és indítsd útnak a képzeleted!</p>
+        </header>
+
+        <div class="info-box">
+            <div class="info-icon">📐</div>
+            <div>
+                <h3 data-hu="Miért van több részre bontva a rakéta?" data-en="Why is the rocket split into multiple parts?">Miért van több részre bontva a rakéta?</h3>
+                <p data-hu="A rakéta teljes magassága meghaladja a <span class='highlight'>250 mm</span>-t, ami nagyobb, mint a legtöbb 3D nyomtató nyomtatási területe (a Creality K1 max. magassága <span class='highlight-green'>250 mm</span>). Ezért a modellt több részre bontottuk, hogy bárki ki tudja nyomtatni a saját nyomtatóján. A részek könnyen összeilleszthetők a csatlakozó elemek segítségével!" data-en="The rocket's total height exceeds <span class='highlight'>250 mm</span>, which is larger than most 3D printers' build volume (Creality K1 max height is <span class='highlight-green'>250 mm</span>). Therefore, the model has been split into multiple parts so anyone can print it on their own printer. The parts can be easily assembled using the connector pieces!">A rakéta teljes magassága meghaladja a <span class="highlight">250 mm</span>-t, ami nagyobb, mint a legtöbb 3D nyomtató nyomtatási területe (a Creality K1 max. magassága <span class="highlight-green">250 mm</span>). Ezért a modellt több részre bontottuk, hogy bárki ki tudja nyomtatni a saját nyomtatóján. A részek könnyen összeilleszthetők a csatlakozó elemek segítségével!</p>
+            </div>
+        </div>
+
+        <div class="size-comparison">
+            <div class="size-item">
+                <div class="size-bar rocket-full">
+                    <span class="size-label">500mm</span>
+                </div>
+                <p class="size-text" data-hu="Eredeti rakéta" data-en="Original rocket">Eredeti rakéta<strong data-hu="❌ Nem fér el" data-en="❌ Won't fit">❌ Nem fér el</strong></p>
+            </div>
+            
+            <div class="comparison-arrow">➡️</div>
+            
+            <div class="size-item">
+                <div class="size-bar print-bed">
+                    <span class="size-label">250mm</span>
+                </div>
+                <p class="size-text" data-hu="Nyomtatóágy max." data-en="Print bed max.">Nyomtatóágy max.<strong>Creality K1</strong></p>
+            </div>
+            
+            <div class="comparison-arrow">➡️</div>
+            
+            <div class="size-item">
+                <div class="size-bar rocket-split">
+                    <span class="size-label">250mm</span>
+                </div>
+                <p class="size-text" data-hu="Részekre bontva" data-en="Split into parts">Részekre bontva<strong data-hu="✅ Elfér!" data-en="✅ Fits!">✅ Elfér!</strong></p>
+            </div>
+        </div>
+
+        <section class="viewer-section">
+            <h2 data-hu="👁️ 3D Modell Megtekintő" data-en="👁️ 3D Model Viewer">👁️ 3D Modell Megtekintő</h2>
+            
+            <div class="viewer-container">
+                <div id="model-viewer"></div>
+                <div class="loading-overlay" id="loading-overlay">
+                    <div class="loading-spinner"></div>
+                    <p class="loading-text" data-hu="Modell betöltése..." data-en="Loading model...">Modell betöltése...</p>
+                </div>
+            </div>
+
+            <div class="viewer-controls">
+                <button class="viewer-btn wing active" onclick="loadModel('raketa_szarny.stl', this)" data-hu="🔷 Szárny" data-en="🔷 Wing">🔷 Szárny</button>
+                <button class="viewer-btn middle" onclick="loadModel('raketa_kozep.stl', this)" data-hu="🚀 Középső Rész" data-en="🚀 Middle Part">🚀 Középső Rész</button>
+                <button class="viewer-btn connector" onclick="loadModel('raketa_connector.stl', this)" data-hu="🔗 Csatlakozó" data-en="🔗 Connector">🔗 Csatlakozó</button>
+                <button class="viewer-btn stand" onclick="loadModel('raketa_stand.stl', this)" data-hu="🪜 Állvány" data-en="🪜 Stand">🪜 Állvány</button>
+                <button class="viewer-btn cap" onclick="loadModel('raketa_kupakholder.stl', this)" data-hu="🔘 Kupak Tartó" data-en="🔘 Cap Holder">🔘 Kupak Tartó</button>
+                <button class="viewer-btn bottleholder" onclick="loadModel('raketa_bottleholder.stl', this)" data-hu="🥂 Üveg Tartó" data-en="🥂 Bottle Holder">Üveg Tartó</button>
+            </div>
+
+            <div class="color-controls">
+                <span class="color-label" data-hu="Szín:" data-en="Color:">Szín:</span>
+                <input type="color" class="color-picker" id="colorPicker" value="#48dbfb" onchange="changeModelColor(this.value)">
+                <div class="color-presets">
+                    <div class="color-preset" style="background: #48dbfb;" onclick="changeModelColor('#48dbfb')"></div>
+                    <div class="color-preset" style="background: #ff6b6b;" onclick="changeModelColor('#ff6b6b')"></div>
+                    <div class="color-preset" style="background: #feca57;" onclick="changeModelColor('#feca57')"></div>
+                    <div class="color-preset" style="background: #2ed573;" onclick="changeModelColor('#2ed573')"></div>
+                    <div class="color-preset" style="background: #a855f7;" onclick="changeModelColor('#a855f7')"></div>
+                    <div class="color-preset" style="background: #ffffff;" onclick="changeModelColor('#ffffff')"></div>
+                </div>
+            </div>
+
+            <div class="viewer-info">
+                <div class="viewer-hint">
+                    <div class="hint-item">
+                        <span class="hint-icon">🖱️</span>
+                        <span data-hu="Bal klikk + húzás = Forgatás" data-en="Left click + drag = Rotate">Bal klikk + húzás = Forgatás</span>
+                    </div>
+                    <div class="hint-item">
+                        <span class="hint-icon">🔍</span>
+                        <span data-hu="Görgő = Nagyítás/Kicsinyítés" data-en="Scroll = Zoom in/out">Görgő = Nagyítás/Kicsinyítés</span>
+                    </div>
+                    <div class="hint-item">
+                        <span class="hint-icon">✋</span>
+                        <span data-hu="Jobb klikk + húzás = Mozgatás" data-en="Right click + drag = Pan">Jobb klikk + húzás = Mozgatás</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="cards-container">
+            <div class="card">
+                <div class="card-icon">🎨</div>
+                <h2 data-hu="Egyedi Dizájn" data-en="Unique Design">Egyedi Dizájn</h2>
+                <p data-hu="A rakéta egyedi tervezésű, részletgazdag modell, amely tökéletesen alkalmas dekorációnak, játéknak vagy akár oktatási célokra is." data-en="The rocket is a uniquely designed, detailed model that is perfect for decoration, toys, or even educational purposes.">A rakéta egyedi tervezésű, részletgazdag modell, amely tökéletesen alkalmas dekorációnak, játéknak vagy akár oktatási célokra is.</p>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">📐</div>
+                <h2 data-hu="Optimalizált Méret" data-en="Optimized Size">Optimalizált Méret</h2>
+                <p data-hu="A modellt úgy terveztük, hogy minden része 250 mm alatt maradjon, így bármilyen átlagos 3D nyomtatón kinyomtatható!" data-en="The model is designed so that each part stays under 250mm, making it printable on any standard 3D printer!">A modellt úgy terveztük, hogy minden része 250 mm alatt maradjon, így bármilyen átlagos 3D nyomtatón kinyomtatható!</p>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">🧩</div>
+                <h2 data-hu="5 Alkatrész" data-en="5 Parts">5 Alkatrész</h2>
+                <p data-hu="A rakéta 3 féle alkatrészből áll: 2 szárny (azonos), 1 középső rész és 2 csatlakozó elem az összeszereléshez." data-en="The rocket consists of 3 types of parts: 2 wings (identical), 1 middle section, and 2 connectors for assembly.">A rakéta 3 féle alkatrészből áll: 2 szárny (azonos), 1 középső rész és 2 csatlakozó elem az összeszereléshez.</p>
+            </div>
+        </div>
+
+        <section class="specs-section">
+            <h2 data-hu="🛠️ Nyomtatási Specifikációk" data-en="🛠️ Print Specifications">🛠️ Nyomtatási Specifikációk</h2>
+            <div class="specs-grid">
+                <div class="spec-item">
+                    <div class="icon">🖨️</div>
+                    <div class="label" data-hu="Nyomtató" data-en="Printer">Nyomtató</div>
+                    <div class="value">Creality K1</div>
+                </div>
+                
+                <div class="spec-item">
+                    <div class="icon">🔧</div>
+                    <div class="label" data-hu="Fúvóka Méret" data-en="Nozzle Size">Fúvóka Méret</div>
+                    <div class="value">0.4 mm</div>
+                </div>
+                
+                <div class="spec-item">
+                    <div class="icon">🧵</div>
+                    <div class="label" data-hu="Filament Típus" data-en="Filament Type">Filament Típus</div>
+                    <div class="value">PLA</div>
+                </div>
+                
+                <div class="spec-item">
+                    <div class="icon">🏗️</div>
+                    <div class="label" data-hu="Support" data-en="Support">Support</div>
+                    <div class="value" data-hu="Igen ✓" data-en="Yes ✓">Igen ✓</div>
+                </div>
+
+                <div class="spec-item">
+                    <div class="icon">📏</div>
+                    <div class="label" data-hu="Max. rész magasság" data-en="Max. part height">Max. rész magasság</div>
+                    <div class="value"><250 mm</div>
+                </div>
+
+                <div class="spec-item">
+                    <div class="icon">📐</div>
+                    <div class="label" data-hu="Teljes magasság" data-en="Total height">Teljes magasság</div>
+                    <div class="value">>250 mm</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="parts-list-section">
+            <h2 data-hu="📦 Szükséges Alkatrészek" data-en="📦 Required Parts">📦 Szükséges Alkatrészek</h2>
+            <div class="parts-table">
+                <div class="parts-table-row">
+                    <div class="part-name">
+                        <span class="part-name-icon">🔷</span>
+                        <span data-hu="Szárny (raketa_szarny.stl)" data-en="Wing (raketa_szarny.stl)">Szárny (raketa_szarny.stl)</span>
+                    </div>
+                    <div class="part-qty" data-hu="2 db" data-en="2 pcs">2 db</div>
+                </div>
+                <div class="parts-table-row">
+                    <div class="part-name">
+                        <span class="part-name-icon">🚀</span>
+                        <span data-hu="Középső rész (raketa_kozep.stl)" data-en="Middle part (raketa_kozep.stl)">Középső rész (raketa_kozep.stl)</span>
+                    </div>
+                    <div class="part-qty" data-hu="1 db" data-en="1 pc">1 db</div>
+                </div>
+                <div class="parts-table-row">
+                    <div class="part-name">
+                        <span class="part-name-icon">🔗</span>
+                        <span data-hu="Csatlakozó (raketa_connector.stl)" data-en="Connector (raketa_connector.stl)">Csatlakozó (raketa_connector.stl)</span>
+                    </div>
+                    <div class="part-qty" data-hu="2 db" data-en="2 pcs">2 db</div>
+                </div>
+                <div class="parts-table-row">
+                    <div class="part-name">
+                        <span class="part-name-icon">🪜</span>
+                        <span data-hu="Állvány (raketa_stand.stl)" data-en="Stand (raketa_stand.stl)">Állvány (raketa_stand.stl)</span>
+                    </div>
+                    <div class="part-qty" data-hu="1 db" data-en="1 pcs">1 db</div>
+                </div>
+                <div class="parts-table-row">
+                    <div class="part-name">
+                        <span class="part-name-icon">🔘</span>
+                        <span data-hu="Kupak (raketa_capholder.stl)" data-en="Cap Holder (raketa_capholder.stl)">Kupak holder (raketa_capholder.stl)</span>
+                    </div>
+                    <div class="part-qty" data-hu="1 db" data-en="1 pcs">1 db</div>
+                </div>
+                <div class="parts-table-row">
+                    <div class="part-name">
+                        <span class="part-name-icon">🥂</span>
+                        <span data-hu="Üveg Tartó (raketa_bottleholder.stl)" data-en="Bottle Holder (raketa_bottleholder.stl)">Bottle Holder (raketa_bottleholder.stl)</span>
+                    </div>
+                    <div class="part-qty" data-hu="1 db" data-en="1 pcs">1 db</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="docs-section">
+            <h2 data-hu="📄 Részletes Dokumentáció" data-en="📄 Detailed Documentation">📄 Részletes Dokumentáció</h2>
+            <p data-hu="Töltsd le a teljes dokumentációt a kívánt formátumban, amely tartalmazza az összes részletes utasítást, méreteket és tippeket!" data-en="Download the complete documentation in your preferred format, which contains all detailed instructions, dimensions, and tips!">Töltsd le a teljes dokumentációt a kívánt formátumban, amely tartalmazza az összes részletes utasítást, méreteket és tippeket!</p>
+            
+            <div class="docs-buttons">
+                <a href="raketa_dokumentacio.docx" download class="word-btn word-pulse">
+                    <div class="word-logo">W</div>
+                    <span data-hu="Word Dokumentum (.docx)" data-en="Word Document (.docx)">Word Dokumentum (.docx)</span>
+                </a>
+                
+                <a href="raketa_readme.md" download class="md-btn md-pulse">
+                    <div class="md-logo">MD</div>
+                    <span data-hu="Markdown Fájl (.md)" data-en="Markdown File (.md)">Markdown Fájl (.md)</span>
+                </a>
+            </div>
+        </section>
+
+        <section class="guide-section">
+            <h2 data-hu="📋 Nyomtatási Útmutató" data-en="📋 Printing Guide">📋 Nyomtatási Útmutató</h2>
+            
+            <ul class="guide-list">
+                <li>
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3 data-hu="STL Fájlok Letöltése" data-en="Download STL Files">STL Fájlok Letöltése</h3>
+                        <p data-hu="Töltsd le mindhárom STL fájlt az alábbi gombokra kattintva. A szárnyat 2x, a csatlakozót 2x kell nyomtatni!" data-en="Download all three STL files by clicking the buttons below. The wing needs to be printed 2x, the connector 2x!">Töltsd le mindhárom STL fájlt az alábbi gombokra kattintva. A szárnyat <strong>2x</strong>, a csatlakozót <strong>2x</strong> kell nyomtatni!</p>
+                    </div>
+                </li>
+                
+                <li>
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3 data-hu="Slicer Program Megnyitása" data-en="Open Slicer Program">Slicer Program Megnyitása</h3>
+                        <p data-hu="Használd a Creality Print vagy Cura szoftvert a fájlok előkészítéséhez. Importáld az STL fájlokat a programba." data-en="Use Creality Print or Cura software to prepare the files. Import the STL files into the program.">Használd a <strong>Creality Print</strong> vagy <strong>Cura</strong> szoftvert a fájlok előkészítéséhez. Importáld az STL fájlokat a programba.</p>
+                    </div>
+                </li>
+                
+                <li>
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3 data-hu="Beállítások Konfigurálása" data-en="Configure Settings">Beállítások Konfigurálása</h3>
+                        <p data-hu="Állítsd be a következőket: 0.4mm fúvóka, PLA filament (200-210°C), rétegmagasság: 0.2mm, kitöltés: 15-20%." data-en="Set the following: 0.4mm nozzle, PLA filament (200-210°C), layer height: 0.2mm, infill: 15-20%.">Állítsd be a következőket: <strong>0.4mm fúvóka</strong>, <strong>PLA filament</strong> (200-210°C), rétegmagasság: <strong>0.2mm</strong>, kitöltés: <strong>15-20%</strong>.</p>
+                    </div>
+                </li>
+                
+                <li>
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3 data-hu="Support Bekapcsolása" data-en="Enable Support">Support Bekapcsolása</h3>
+                        <p data-hu="⚠️ Fontos: A support KÖTELEZŐ ehhez a modellhez! Állítsd be a 'Support' opciót 'Everywhere' vagy 'Touching Buildplate' módra." data-en="⚠️ Important: Support is REQUIRED for this model! Set the 'Support' option to 'Everywhere' or 'Touching Buildplate' mode."><strong>⚠️ Fontos:</strong> A support KÖTELEZŐ ehhez a modellhez! Állítsd be a "Support" opciót "Everywhere" vagy "Touching Buildplate" módra.</p>
+                    </div>
+                </li>
+                
+                <li>
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <h3 data-hu="Nyomtatás Indítása" data-en="Start Printing">Nyomtatás Indítása</h3>
+                        <p data-hu="Slice-old a modelleket, mentsd a G-code fájlokat. Ne felejtsd el a szárnyat 2x és a csatlakozót 2x kinyomtatni!" data-en="Slice the models, save the G-code files. Don't forget to print the wing 2x and the connector 2x!">Slice-old a modelleket, mentsd a G-code fájlokat. <strong>Ne felejtsd el a szárnyat 2x és a csatlakozót 2x kinyomtatni!</strong></p>
+                    </div>
+                </li>
+                
+                <li>
+                    <div class="step-number">6</div>
+                    <div class="step-content">
+                        <h3 data-hu="Utómunkálatok és Összeszerelés" data-en="Post-processing and Assembly">Utómunkálatok és Összeszerelés</h3>
+                        <p data-hu="Nyomtatás után távolítsd el a supportokat, csiszold le az egyenetlenségeket, majd a csatlakozók segítségével ragaszd össze a részeket." data-en="After printing, remove the supports, sand down any irregularities, then glue the parts together using the connectors.">Nyomtatás után távolítsd el a supportokat, csiszold le az egyenetlenségeket, majd a csatlakozók segítségével ragaszd össze a részeket.</p>
+                    </div>
+                </li>
+            </ul>
+        </section>
+
+        <div class="warning-box">
+            <div class="warning-icon">⚠️</div>
+            <div>
+                <h3 data-hu="Fontos Tudnivalók" data-en="Important Information">Fontos Tudnivalók</h3>
+                <p data-hu="A support használata KÖTELEZŐ ehhez a modellhez! Support nélkül a nyomtatás sikertelen lesz. A szárnyat 2 darab, a csatlakozót 2 darab kell nyomtatni! Győződj meg róla, hogy a nyomtatóágy tiszta és megfelelően szintezett. PLA filamenthez ajánlott ágyhőmérséklet: 50-60°C." data-en="Support is REQUIRED for this model! Without support, printing will fail. You need to print 2 wings and 2 connectors! Make sure the print bed is clean and properly leveled. Recommended bed temperature for PLA: 50-60°C.">A support használata <strong>KÖTELEZŐ</strong> ehhez a modellhez! Support nélkül a nyomtatás sikertelen lesz. <strong>A szárnyat 2 darab, a csatlakozót 2 darab kell nyomtatni!</strong> Győződj meg róla, hogy a nyomtatóágy tiszta és megfelelően szintezett. PLA filamenthez ajánlott ágyhőmérséklet: 50-60°C.</p>
+            </div>
+        </div>
+
+        <section class="download-section stand-section">
+            <h2 data-hu="🔭 Rakéta Állvány" data-en="🔭 Rocket Stand">🔭 Rakéta Állvány</h2>
+            <p data-hu="Töltsd le az állványt, hogy biztonságosan kiállíthasd a rakétádat!" data-en="Download the stand to display your rocket safely!">Töltsd le az állványt, hogy biztonságosan kiállíthasd a rakétádat!</p>
+            
+            <div class="parts-info">
+                <div class="part-card stand">
+                    <div class="part-icon">📐</div>
+                    <h3 data-hu="Állvány Alap" data-en="Stand Base">Állvány Alap</h3>
+                    <a href="stand_base.stl" download class="download-btn-small">
+                        <span data-hu="📥 Letöltés" data-en="📥 Download">📥 Letöltés</span>
+                    </a>
+                </div>
+                
+                <div class="part-card stand">
+                    <div class="part-icon">🔝</div>
+                    <h3 data-hu="Kupak Tartó" data-en="Cap Holder">Kupak Tartó</h3>
+                    <a href="stand_top.stl" download class="download-btn-small">
+                        <span data-hu="📥 Letöltés" data-en="📥 Download">📥 Letöltés</span>
+                    </a>
+                </div>
+
+                <div class="download-all">
+                    <p data-hu="Vagy töltsd le mindet egyben:" data-en="Or download all at once:">Vagy töltsd le mindet egyben:</p>
+                    <a href="raketa_standcomplete.zip" download class="download-btn pulse">
+                        <span class="btn-icon">📦</span>
+                        <span data-hu="Összes Letöltése (ZIP)" data-en="Download All (ZIP)">Összes Letöltése (ZIP)</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section class="download-section">
+            <h2 data-hu="📥 Töltsd Le a Modellt!" data-en="📥 Download the Model!">📥 Töltsd Le a Modellt!</h2>
+            <p data-hu="A rakéta 3 féle alkatrészből áll. Minden rész 250 mm alatt van, így biztosan elfér a nyomtatóágyon! Töltsd le mindegyiket és kövesd az összeszerelési útmutatót!" data-en="The rocket consists of 3 types of parts. Each part is under 250mm, so it will definitely fit on the print bed! Download all of them and follow the assembly guide!">A rakéta 3 féle alkatrészből áll. Minden rész <strong>250 mm alatt van</strong>, így biztosan elfér a nyomtatóágyon! Töltsd le mindegyiket és kövesd az összeszerelési útmutatót!</p>
+            
+            <div class="parts-info">
+                <div class="part-card">
+                    <div class="part-icon">🔷</div>
+                    <h3 data-hu="Szárny" data-en="Wing">Szárny</h3>
+                    <p data-hu="A rakéta szárnya (bal és jobb oldal)" data-en="The rocket's wing (left and right side)">A rakéta szárnya (bal és jobb oldal)</p>
+                    <div class="print-quantity" data-hu="⚠️ 2x NYOMTATANDÓ!" data-en="⚠️ PRINT 2x!">⚠️ 2x NYOMTATANDÓ!</div>
+                    <a href="raketa_szarny.stl" download class="download-btn-small">
+                        <span data-hu="📥 Szárny letöltése" data-en="📥 Download Wing">📥 Szárny letöltése</span>
+                    </a>
+                </div>
+                
+                <div class="part-card middle">
+                    <div class="part-icon">🚀</div>
+                    <h3 data-hu="Középső Rész" data-en="Middle Part">Középső Rész</h3>
+                    <p data-hu="A rakéta középső törzse" data-en="The rocket's middle body">A rakéta középső törzse</p>
+                    <div class="print-quantity" style="background: rgba(254, 202, 87, 0.2); color: #feca57; border-color: rgba(254, 202, 87, 0.3);" data-hu="1x NYOMTATANDÓ" data-en="PRINT 1x">1x NYOMTATANDÓ</div>
+                    <a href="raketa_kozep.stl" download class="download-btn-small">
+                        <span data-hu="📥 Középső rész letöltése" data-en="📥 Download Middle Part">📥 Középső rész letöltése</span>
+                    </a>
+                </div>
+                
+                <div class="part-card connector">
+                    <div class="part-icon">🔗</div>
+                    <h3 data-hu="Csatlakozó" data-en="Connector">Csatlakozó</h3>
+                    <p data-hu="Összekötő elem a szárnyakhoz" data-en="Connector piece for the wings">Összekötő elem a szárnyakhoz</p>
+                    <div class="print-quantity" style="background: rgba(46, 213, 115, 0.2); color: #2ed573; border-color: rgba(46, 213, 115, 0.3);" data-hu="⚠️ 2x NYOMTATANDÓ!" data-en="⚠️ PRINT 2x!">⚠️ 2x NYOMTATANDÓ!</div>
+                    <a href="raketa_connector.stl" download class="download-btn-small">
+                        <span data-hu="📥 Csatlakozó letöltése" data-en="📥 Download Connector">📥 Csatlakozó letöltése</span>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="download-all">
+                <p data-hu="Vagy töltsd le mindet egyben:" data-en="Or download all at once:">Vagy töltsd le mindet egyben:</p>
+                <a href="raketa_complete.zip" download class="download-btn pulse">
+                    <span class="btn-icon">📦</span>
+                    <span data-hu="Összes Letöltése (ZIP)" data-en="Download All (ZIP)">Összes Letöltése (ZIP)</span>
+                </a>
+            </div>
+        </section>
+
+        <section class="assembly-section">
+            <h2 data-hu="🔧 Összeszerelési Útmutató" data-en="🔧 Assembly Guide">🔧 Összeszerelési Útmutató</h2>
+            
+            <div class="assembly-diagram">
+                <div class="assembly-part" data-hu="🔷 Szárny" data-en="🔷 Wing">🔷 Szárny</div>
+                <div class="assembly-arrow">➕</div>
+                <div class="assembly-part connector" data-hu="🔗 Csatlakozó" data-en="🔗 Connector">🔗 Csatlakozó</div>
+                <div class="assembly-arrow">➕</div>
+                <div class="assembly-part middle" data-hu="🚀 Közép" data-en="🚀 Middle">🚀 Közép</div>
+                <div class="assembly-arrow">➕</div>
+                <div class="assembly-part" data-hu="🔷 Szárny" data-en="🔷 Wing">🔷 Szárny</div>
+                <div class="assembly-arrow">➕</div>
+                <div class="assembly-part connector" data-hu="🔗 Csatlakozó" data-en="🔗 Connector">🔗 Csatlakozó</div>
+                <div class="assembly-arrow">=</div>
+                <div class="assembly-result" data-hu="🚀 Kész Rakéta!" data-en="🚀 Finished Rocket!">🚀 Kész Rakéta!</div>
+            </div>
+            
+            <div class="assembly-tips">
+                <h3 data-hu="💡 Összeszerelési Tippek:" data-en="💡 Assembly Tips:">💡 Összeszerelési Tippek:</h3>
+                <ul>
+                    <li data-hu="🔹 Nyomtasd ki a szárnyat 2 példányban" data-en="🔹 Print the wing in 2 copies">🔹 Nyomtasd ki a szárnyat <strong>2 példányban</strong></li>
+                    <li data-hu="🔹 Nyomtasd ki a csatlakozót 2 példányban" data-en="🔹 Print the connector in 2 copies">🔹 Nyomtasd ki a csatlakozót <strong>2 példányban</strong></li>
+                    <li data-hu="🔹 Először az egyik csatlakozóval kösd össze az egyik szárnyat a középső résszel" data-en="🔹 First, connect one wing to the middle part with one connector">🔹 Először az egyik csatlakozóval kösd össze az egyik szárnyat a középső résszel</li>
+                    <li data-hu="🔹 Majd a másik csatlakozóval kösd össze a másik szárnyat" data-en="🔹 Then connect the other wing with the other connector">🔹 Majd a másik csatlakozóval kösd össze a másik szárnyat</li>
+                    <li data-hu="🔹 Használj pillanatragasztót vagy műanyag ragasztót" data-en="🔹 Use super glue or plastic adhesive">🔹 Használj pillanatragasztót vagy műanyag ragasztót</li>
+                    <li data-hu="🔹 A részek illeszkedési pontjait csiszold le finoman" data-en="🔹 Gently sand down the connection points">🔹 A részek illeszkedési pontjait csiszold le finoman</li>
+                    <li data-hu="🔹 Ragasztás előtt próbáld összeilleszteni szárazon" data-en="🔹 Try dry-fitting before gluing">🔹 Ragasztás előtt próbáld összeilleszteni szárazon</li>
+                    <li data-hu="🔹 Hagyd száradni legalább 1 órát ragasztás után" data-en="🔹 Let it dry for at least 1 hour after gluing">🔹 Hagyd száradni legalább 1 órát ragasztás után</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="specs-section">
+            <h2 data-hu="💻 Ajánlott Szoftverek" data-en="💻 Recommended Software">💻 Ajánlott Szoftverek</h2>
+            <div class="specs-grid">
+                <div class="spec-item">
+                    <div class="icon">🖥️</div>
+                    <div class="label" data-hu="Slicer Program" data-en="Slicer Program">Slicer Program</div>
+                    <div class="value">Creality Print</div>
+                </div>
+                
+                <div class="spec-item">
+                    <div class="icon">🎯</div>
+                    <div class="label" data-hu="Alternatíva" data-en="Alternative">Alternatíva</div>
+                    <div class="value">Ultimaker Cura</div>
+                </div>
+                
+                <div class="spec-item">
+                    <div class="icon">📊</div>
+                    <div class="label" data-hu="STL Megtekintő" data-en="STL Viewer">STL Megtekintő</div>
+                    <div class="value">3D Viewer</div>
+                </div>
+                
+                <div class="spec-item">
+                    <div class="icon">✏️</div>
+                    <div class="label" data-hu="Szerkesztés" data-en="Editing">Szerkesztés</div>
+                    <div class="value">Blender / Fusion360</div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p data-hu="🚀 3D Nyomtatott Rakéta Projekt" data-en="🚀 3D Printed Rocket Project">🚀 3D Nyomtatott Rakéta Projekt</p>
+            <p data-hu="Készült szeretettel a 3D nyomtatás szerelmeseinek" data-en="Made with love for 3D printing enthusiasts">Készült szeretettel a 3D nyomtatás szerelmeseinek</p>
+            <p>© 2026 - <span data-hu="Minden jog fenntartva" data-en="All rights reserved">Minden jog fenntartva</span></p>
+            <p><span data-hu="Készítette: Búzás Bence, Oláh Dominik, Kovács Áron" data-en="Created by: Búzás Bence, Oláh Dominik, Kovács Áron"  >Készítette: Búzás Bence, Oláh Dominik, Kovács Áron</span></p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

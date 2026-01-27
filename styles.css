@@ -1,0 +1,1327 @@
+/* ========================================
+   🚀 3D Printed Rocket - Stylesheet
+   ======================================== */
+
+/* Reset & Base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #0c0c1e 0%, #1a1a3e 50%, #0c0c1e 100%);
+    min-height: 100vh;
+    color: #ffffff;
+}
+
+/* ========================================
+   Language Switcher
+   ======================================== */
+.language-switcher {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    gap: 5px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 8px;
+    border-radius: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.lang-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: all 0.3s;
+    background: transparent;
+    color: #a0a0c0;
+}
+
+.lang-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.lang-btn.active {
+    background: linear-gradient(45deg, #48dbfb, #0abde3);
+    color: white;
+    box-shadow: 0 5px 15px rgba(72, 219, 251, 0.4);
+}
+
+.lang-btn .flag {
+    font-size: 1.3rem;
+}
+
+/* ========================================
+   Stars Background
+   ======================================== */
+.stars {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle 2s infinite;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+}
+
+/* ========================================
+   Container
+   ======================================== */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+/* ========================================
+   Header
+   ======================================== */
+header {
+    text-align: center;
+    padding: 60px 20px;
+    padding-top: 100px;
+}
+
+.rocket-icon {
+    font-size: 80px;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+h1 {
+    font-size: 3rem;
+    margin: 20px 0;
+    background: linear-gradient(45deg, #ff6b6b, #feca57, #48dbfb);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.subtitle {
+    font-size: 1.3rem;
+    color: #a0a0c0;
+    margin-bottom: 30px;
+}
+
+/* ========================================
+   Info Box - Why Split
+   ======================================== */
+.info-box {
+    background: linear-gradient(135deg, rgba(72, 219, 251, 0.1), rgba(46, 213, 115, 0.1));
+    border: 1px solid rgba(72, 219, 251, 0.3);
+    border-radius: 15px;
+    padding: 25px;
+    margin: 30px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.info-box .info-icon {
+    font-size: 40px;
+    flex-shrink: 0;
+}
+
+.info-box h3 {
+    color: #48dbfb;
+    margin-bottom: 10px;
+}
+
+.info-box p {
+    color: #c0c0d0;
+    line-height: 1.6;
+}
+
+.info-box .highlight {
+    background: rgba(255, 107, 107, 0.2);
+    color: #ff6b6b;
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.info-box .highlight-green {
+    background: rgba(46, 213, 115, 0.2);
+    color: #2ed573;
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+/* Size Comparison Visual */
+.size-comparison {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 40px;
+    margin: 30px 0;
+    padding: 30px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+}
+
+.size-item {
+    text-align: center;
+}
+
+.size-bar {
+    width: 60px;
+    background: linear-gradient(180deg, #ff6b6b, #ee5a24);
+    border-radius: 10px 10px 0 0;
+    margin: 0 auto 10px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.size-bar.rocket-full {
+    height: 200px;
+    background: linear-gradient(180deg, #ff6b6b, #ee5a24);
+}
+
+.size-bar.print-bed {
+    height: 150px;
+    background: linear-gradient(180deg, #2ed573, #26de81);
+    border: 2px dashed rgba(255, 255, 255, 0.3);
+}
+
+.size-bar.rocket-split {
+    height: 100px;
+    background: linear-gradient(180deg, #48dbfb, #0abde3);
+}
+
+.size-label {
+    color: white;
+    font-weight: bold;
+    font-size: 0.9rem;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+}
+
+.size-text {
+    color: #a0a0c0;
+    font-size: 0.9rem;
+}
+
+.size-text strong {
+    color: white;
+    display: block;
+    margin-top: 5px;
+}
+
+.comparison-arrow {
+    font-size: 2rem;
+    color: #feca57;
+    align-self: center;
+}
+
+/* ========================================
+   3D Viewer Section
+   ======================================== */
+.viewer-section {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 20px;
+    padding: 40px;
+    margin: 40px 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.viewer-section h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 30px;
+    color: #48dbfb;
+}
+
+.viewer-container {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border-radius: 15px;
+    overflow: hidden;
+    border: 2px solid rgba(72, 219, 251, 0.3);
+}
+
+#model-viewer {
+    width: 100%;
+    height: 100%;
+}
+
+.viewer-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.viewer-btn {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: all 0.3s;
+    background: rgba(255, 255, 255, 0.1);
+    color: #a0a0c0;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.viewer-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+}
+
+.viewer-btn.active {
+    background: linear-gradient(45deg, #48dbfb, #0abde3);
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 5px 15px rgba(72, 219, 251, 0.4);
+}
+
+.viewer-btn.wing.active {
+    background: linear-gradient(45deg, #d9d9d9, #d9d9d9);
+}
+
+.viewer-btn.middle.active {
+    background: linear-gradient(45deg, #6b6b6b, #6b6b6b);
+}
+
+.viewer-btn.connector.active {
+    background: linear-gradient(45deg, #1a1a1a, #1a1a1a);
+}
+
+.viewer-btn.stand.active {
+    background: linear-gradient(45deg, #3a3a3a, #3a3a3a);
+}
+
+.viewer-btn.cap.active {
+    background: linear-gradient(45deg, #f2f2f2, #f2f2f2);
+}
+
+.viewer-btn.bottleholder.active {
+    background: linear-gradient(45deg, #bfc3c7, #bfc3c7);
+}
+
+.viewer-info {
+    text-align: center;
+    margin-top: 20px;
+    color: #a0a0c0;
+}
+
+.viewer-info p {
+    margin: 10px 0;
+}
+
+.viewer-hint {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin-top: 15px;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.hint-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #c0c0d0;
+}
+
+.hint-icon {
+    font-size: 1.2rem;
+}
+
+/* Loading Overlay */
+.loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.loading-spinner {
+    width: 60px;
+    height: 60px;
+    border: 4px solid rgba(72, 219, 251, 0.3);
+    border-top-color: #48dbfb;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.loading-text {
+    margin-top: 20px;
+    color: #48dbfb;
+    font-size: 1.1rem;
+}
+
+.error-message {
+    text-align: center;
+    color: #ff6b6b;
+    padding: 20px;
+}
+
+.error-message h3 {
+    margin-bottom: 10px;
+}
+
+/* Color Controls */
+.color-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 15px;
+    flex-wrap: wrap;
+}
+
+.color-label {
+    color: #a0a0c0;
+}
+
+.color-picker {
+    width: 50px;
+    height: 35px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background: transparent;
+}
+
+.color-presets {
+    display: flex;
+    gap: 8px;
+}
+
+.color-preset {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.3s;
+}
+
+.color-preset:hover {
+    transform: scale(1.2);
+    border-color: white;
+}
+
+/* ========================================
+   Cards
+   ======================================== */
+.cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin: 40px 0;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.card-icon {
+    font-size: 50px;
+    margin-bottom: 20px;
+}
+
+.card h2 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #48dbfb;
+}
+
+.card p {
+    color: #c0c0d0;
+    line-height: 1.6;
+}
+
+/* ========================================
+   Specifications Section
+   ======================================== */
+.specs-section {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 20px;
+    padding: 40px;
+    margin: 40px 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.specs-section h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 30px;
+    color: #feca57;
+}
+
+.specs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.spec-item {
+    background: rgba(72, 219, 251, 0.1);
+    padding: 25px;
+    border-radius: 15px;
+    text-align: center;
+    border: 1px solid rgba(72, 219, 251, 0.2);
+    transition: all 0.3s;
+}
+
+.spec-item:hover {
+    background: rgba(72, 219, 251, 0.2);
+    transform: scale(1.05);
+}
+
+.spec-item .icon {
+    font-size: 40px;
+    margin-bottom: 15px;
+}
+
+.spec-item .label {
+    font-size: 0.9rem;
+    color: #a0a0c0;
+    margin-bottom: 5px;
+}
+
+.spec-item .value {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #48dbfb;
+}
+
+/* ========================================
+   Parts List Section
+   ======================================== */
+.parts-list-section {
+    background: rgba(72, 219, 251, 0.05);
+    border-radius: 20px;
+    padding: 40px;
+    margin: 40px 0;
+    border: 1px solid rgba(72, 219, 251, 0.2);
+}
+
+.parts-list-section h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 30px;
+    color: #48dbfb;
+}
+
+.parts-table {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.parts-table-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.parts-table-row:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.part-name {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.part-name-icon {
+    font-size: 1.5rem;
+}
+
+.part-qty {
+    background: rgba(255, 107, 107, 0.2);
+    color: #ff6b6b;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+/* ========================================
+   Documentation Section
+   ======================================== */
+.docs-section {
+    background: linear-gradient(135deg, rgba(41, 128, 185, 0.1), rgba(52, 152, 219, 0.1));
+    border-radius: 20px;
+    padding: 40px;
+    margin: 40px 0;
+    border: 1px solid rgba(52, 152, 219, 0.3);
+    text-align: center;
+}
+
+.docs-section h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #3498db;
+}
+
+.docs-section > p {
+    color: #a0a0c0;
+    margin-bottom: 30px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.docs-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+/* Word Button */
+.word-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 15px;
+    background: linear-gradient(45deg, #2b5797, #3498db);
+    color: white;
+    padding: 18px 40px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s;
+    box-shadow: 0 10px 30px rgba(52, 152, 219, 0.4);
+}
+
+.word-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 15px 40px rgba(52, 152, 219, 0.6);
+}
+
+.word-logo {
+    width: 40px;
+    height: 40px;
+    background: white;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #2b5797;
+    font-size: 1.2rem;
+}
+
+@keyframes wordPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.4); }
+    50% { box-shadow: 0 0 0 20px rgba(52, 152, 219, 0); }
+}
+
+.word-pulse {
+    animation: wordPulse 2s infinite;
+}
+
+/* Markdown Button */
+.md-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 15px;
+    background: linear-gradient(45deg, #6c5ce7, #a855f7);
+    color: white;
+    padding: 18px 40px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s;
+    box-shadow: 0 10px 30px rgba(168, 85, 247, 0.4);
+}
+
+.md-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 15px 40px rgba(168, 85, 247, 0.6);
+}
+
+.md-logo {
+    width: 40px;
+    height: 40px;
+    background: white;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #6c5ce7;
+    font-size: 0.9rem;
+}
+
+@keyframes mdPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.4); }
+    50% { box-shadow: 0 0 0 20px rgba(168, 85, 247, 0); }
+}
+
+.md-pulse {
+    animation: mdPulse 2s infinite;
+}
+
+/* ========================================
+   Guide Section
+   ======================================== */
+.guide-section {
+    background: linear-gradient(135deg, rgba(254, 202, 87, 0.1), rgba(255, 107, 107, 0.1));
+    border-radius: 20px;
+    padding: 40px;
+    margin: 40px 0;
+    border: 1px solid rgba(254, 202, 87, 0.2);
+}
+
+.guide-section h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 30px;
+    color: #feca57;
+}
+
+.guide-list {
+    list-style: none;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.guide-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.guide-list li:last-child {
+    border-bottom: none;
+}
+
+.step-number {
+    background: linear-gradient(45deg, #ff6b6b, #feca57);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.step-content h3 {
+    color: #48dbfb;
+    margin-bottom: 5px;
+}
+
+.step-content p {
+    color: #c0c0d0;
+    line-height: 1.6;
+}
+
+/* ========================================
+   Warning Box
+   ======================================== */
+.warning-box {
+    background: rgba(255, 107, 107, 0.1);
+    border: 1px solid rgba(255, 107, 107, 0.3);
+    border-radius: 15px;
+    padding: 25px;
+    margin: 30px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.warning-box .warning-icon {
+    font-size: 40px;
+}
+
+.warning-box h3 {
+    color: #ff6b6b;
+    margin-bottom: 10px;
+}
+
+.warning-box p {
+    color: #c0c0d0;
+}
+
+/* ========================================
+   Download Section
+   ======================================== */
+.download-section {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.download-section h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.download-section > p {
+    color: #a0a0c0;
+    margin-bottom: 30px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+}
+
+.download-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 15px;
+    background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+    color: white;
+    padding: 20px 50px;
+    font-size: 1.3rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s;
+    box-shadow: 0 10px 30px rgba(238, 90, 36, 0.4);
+}
+
+.download-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 15px 40px rgba(238, 90, 36, 0.6);
+}
+
+.download-btn .btn-icon {
+    font-size: 1.5rem;
+}
+
+/* Part Cards */
+.parts-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin: 40px 0;
+    max-width: 950px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.part-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+    transition: all 0.3s;
+}
+
+.part-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(72, 219, 251, 0.5);
+    box-shadow: 0 10px 30px rgba(72, 219, 251, 0.2);
+}
+
+.part-card.middle {
+    border-color: rgba(254, 202, 87, 0.3);
+    background: rgba(254, 202, 87, 0.05);
+}
+
+.part-card.middle:hover {
+    border-color: rgba(254, 202, 87, 0.5);
+    box-shadow: 0 10px 30px rgba(254, 202, 87, 0.2);
+}
+
+.part-card.connector {
+    border-color: rgba(46, 213, 115, 0.3);
+    background: rgba(46, 213, 115, 0.05);
+}
+
+.part-card.connector:hover {
+    border-color: rgba(46, 213, 115, 0.5);
+    box-shadow: 0 10px 30px rgba(46, 213, 115, 0.2);
+}
+
+.part-icon {
+    font-size: 50px;
+    margin-bottom: 15px;
+}
+
+.part-card h3 {
+    color: #48dbfb;
+    margin-bottom: 10px;
+    font-size: 1.3rem;
+}
+
+.part-card.middle h3 {
+    color: #feca57;
+}
+
+.part-card.connector h3 {
+    color: #2ed573;
+}
+
+.part-card p {
+    color: #a0a0c0;
+    margin-bottom: 15px;
+}
+
+.print-quantity {
+    display: inline-block;
+    background: rgba(255, 107, 107, 0.2);
+    color: #ff6b6b;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    border: 1px solid rgba(255, 107, 107, 0.3);
+}
+
+.download-btn-small {
+    display: inline-block;
+    background: linear-gradient(45deg, #48dbfb, #0abde3);
+    color: white;
+    padding: 12px 25px;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.download-btn-small:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 20px rgba(72, 219, 251, 0.4);
+}
+
+.part-card.middle .download-btn-small {
+    background: linear-gradient(45deg, #feca57, #ff9f43);
+}
+
+.part-card.middle .download-btn-small:hover {
+    box-shadow: 0 5px 20px rgba(254, 202, 87, 0.4);
+}
+
+.part-card.connector .download-btn-small {
+    background: linear-gradient(45deg, #2ed573, #26de81);
+}
+
+.part-card.connector .download-btn-small:hover {
+    box-shadow: 0 5px 20px rgba(46, 213, 115, 0.4);
+}
+
+/* Download All */
+.download-all {
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.download-all p {
+    color: #a0a0c0;
+    margin-bottom: 20px;
+}
+
+/* ========================================
+   Assembly Section
+   ======================================== */
+.assembly-section {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 20px;
+    padding: 40px;
+    margin: 40px 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.assembly-section h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 30px;
+    color: #48dbfb;
+}
+
+.assembly-diagram {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 40px;
+    padding: 30px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+}
+
+.assembly-part {
+    background: rgba(72, 219, 251, 0.2);
+    padding: 15px 25px;
+    border-radius: 10px;
+    font-weight: bold;
+    border: 1px solid rgba(72, 219, 251, 0.3);
+}
+
+.assembly-part.middle {
+    background: rgba(254, 202, 87, 0.2);
+    border-color: rgba(254, 202, 87, 0.3);
+}
+
+.assembly-part.connector {
+    background: rgba(46, 213, 115, 0.2);
+    border-color: rgba(46, 213, 115, 0.3);
+}
+
+.assembly-arrow {
+    font-size: 1.5rem;
+    color: #a0a0c0;
+}
+
+.assembly-result {
+    background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+    padding: 15px 30px;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.assembly-tips {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.assembly-tips h3 {
+    color: #feca57;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.assembly-tips ul {
+    list-style: none;
+}
+
+.assembly-tips li {
+    padding: 10px 0;
+    color: #c0c0d0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.assembly-tips li:last-child {
+    border-bottom: none;
+}
+
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    color: #a0a0c0;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: all 0.3s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #a855f7;
+    box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.2);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #606080;
+}
+
+.form-group textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+/* Star Rating */
+.rating-group {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.star-rating {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 5px;
+}
+
+.star-rating input {
+    display: none;
+}
+
+.star-rating label {
+    font-size: 2rem;
+    cursor: pointer;
+    color: #404060;
+    transition: all 0.2s;
+}
+
+.star-rating label:hover,
+.star-rating label:hover ~ label,
+.star-rating input:checked ~ label {
+    color: #feca57;
+}
+
+.submit-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(45deg, #a855f7, #6c5ce7);
+    color: white;
+    padding: 15px 40px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 10px 30px rgba(168, 85, 247, 0.4);
+}
+
+.submit-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 15px 40px rgba(168, 85, 247, 0.6);
+}
+
+
+.author-avatar {
+    width: 45px;
+    height: 45px;
+    background: linear-gradient(45deg, #a855f7, #6c5ce7);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.author-info h4 {
+    color: #48dbfb;
+    font-size: 1rem;
+}
+
+.author-info span {
+    color: #606080;
+    font-size: 0.85rem;
+}
+
+
+/* ========================================
+   Footer
+   ======================================== */
+footer {
+    text-align: center;
+    padding: 40px 20px;
+    color: #606080;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 60px;
+}
+
+footer p {
+    margin: 10px 0;
+}
+
+/* ========================================
+   Animations
+   ======================================== */
+@keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(72, 219, 251, 0.4); }
+    50% { box-shadow: 0 0 0 20px rgba(72, 219, 251, 0); }
+}
+
+.pulse {
+    animation: pulse 2s infinite;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* ========================================
+   Responsive Design
+   ======================================== */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2rem;
+    }
+    
+    .rocket-icon {
+        font-size: 60px;
+    }
+    
+    .card, 
+    .specs-section, 
+    .guide-section, 
+    .assembly-section, 
+    .parts-list-section, 
+    .docs-section, 
+    .viewer-section {
+        padding: 20px;
+    }
+    
+    .download-btn, 
+    .word-btn, 
+    .md-btn {
+        padding: 15px 30px;
+        font-size: 1.1rem;
+    }
+
+    .assembly-diagram {
+        flex-direction: column;
+    }
+
+    .parts-info {
+        grid-template-columns: 1fr;
+    }
+
+    .docs-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .md-btn, 
+    .word-btn {
+        width: 100%;
+        max-width: 350px;
+        justify-content: center;
+    }
+
+    .language-switcher {
+        top: 10px;
+        right: 10px;
+        padding: 5px;
+    }
+
+    .lang-btn {
+        padding: 8px 12px;
+        font-size: 0.9rem;
+    }
+
+    .lang-btn span:not(.flag) {
+        display: none;
+    }
+
+    .viewer-container {
+        height: 350px;
+    }
+
+    .viewer-hint {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .size-comparison {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .comparison-arrow {
+        transform: rotate(90deg);
+    }
+
+    .info-box {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .rating-group {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
