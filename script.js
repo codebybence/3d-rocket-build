@@ -155,9 +155,9 @@ function loadModel(filename, button) {
             console.error('Error loading model:', error);
             document.getElementById('loading-overlay').innerHTML = `
                 <div class="error-message">
-                    <h3>âš ï¸ Hiba a modell betÃ¶ltÃ©sekor</h3>
-                    <p>GyÅ'zÅ'dj meg rÃ³la, hogy a "${filename}" fÃ¡jl elÃ©rhetÅ'.</p>
-                    <p style="font-size: 0.9rem; margin-top: 10px;">A 3D megjelenÃ­tÃ©shez helyi szerveren kell futtatni az oldalt.</p>
+                    <h3>⚠️ Hiba a modell betöltésekor</h3>
+                    <p>Győződj meg róla, hogy a "${filename}" fájl elérhető.</p>
+                    <p style="font-size: 0.9rem; margin-top: 10px;">A 3D megjelenítéshez helyi szerveren kell futtatni az oldalt.</p>
                 </div>
             `;
         }
